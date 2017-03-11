@@ -2,14 +2,14 @@ FROM nginx:mainline-alpine
 
 MAINTAINER ngineered <support@ngineered.co.uk>
 
-ENV php_conf /etc/php7/php.ini 
+ENV php_conf /etc/php7/php.ini
 ENV fpm_conf /etc/php7/php-fpm.d/www.conf
 
 RUN echo @testing http://nl.alpinelinux.org/alpine/edge/testing >> /etc/apk/repositories && \
     sed -i -e "s/v3.4/edge/" /etc/apk/repositories && \
     echo /etc/apk/respositories && \
     apk update && \
-    apk add --no-cache bash \ 
+    apk add --no-cache bash \
     openssh-client \
     wget \
     nginx \
@@ -61,7 +61,7 @@ RUN echo @testing http://nl.alpinelinux.org/alpine/edge/testing >> /etc/apk/repo
     pip install -U certbot && \
     mkdir -p /etc/letsencrypt/webrootauth && \
     apk del gcc musl-dev linux-headers libffi-dev augeas-dev python-dev
-    
+
 ADD conf/supervisord.conf /etc/supervisord.conf
 
 # Copy our nginx config
@@ -100,6 +100,7 @@ RUN sed -i \
         -e "s/;listen.group = nobody/listen.group = nginx/g" \
         -e "s/listen = 127.0.0.1:9000/listen = \/var\/run\/php-fpm.sock/g" \
         -e "s/^;clear_env = no$/clear_env = no/" \
+        -e "s/;date.timezone =/date.timezone = America\/Los_Angeles/g" \
         ${fpm_conf} && \
     ln -s /etc/php7/php.ini /etc/php7/conf.d/php.ini && \
     find /etc/php7/conf.d/ -name "*.ini" -exec sed -i -re 's/^(\s*)#(.*)/\1;\2/g' {} \;

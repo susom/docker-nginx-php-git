@@ -27,7 +27,10 @@ logging.basicConfig(format='%(asctime)s %(levelname)s %(message)s',
 class RequestHandler(BaseHTTPRequestHandler):
     """A GET request handler"""
     def do_GET(self):
-        self.send_response(200, "OK")
+        self.send_response(200, 'OK')
+        self.send_header('Content-type', 'html')
+        self.end_headers()
+        return
     """A POST request handler which expects a token in its path."""
     def do_POST(self):
         logging.info("Path: %s", self.path)
