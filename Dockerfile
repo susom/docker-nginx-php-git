@@ -109,7 +109,8 @@ RUN sed -i \
 RUN pip install requests
 
 # Add PHP symbolic link to be able to use in CLI
-RUN ln -s /usr/bin/php7 /usr/bin/php
+# for some reason dockerhub is throwing an error here so adding exit0
+RUN ln -s /usr/bin/php7 /usr/bin/php; exit 0
 
 
 # Install WP-CLI
