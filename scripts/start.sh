@@ -84,6 +84,29 @@ if [ ! -z "$PHP_UPLOAD_MAX_FILESIZE" ]; then
  sed -i "s/upload_max_filesize = 100M/upload_max_filesize= ${PHP_UPLOAD_MAX_FILESIZE}M/g" /etc/php7/conf.d/php.ini
 fi
 
+
+# Customize the php-fpm server configurations
+if [ ! -z "$PM_START_SERVERS" ]; then
+ sed -i "s/pm.start_servers =.*/pm.start_servers = ${PM_START_SERVERS}/g" /etc/php7/php-fpm.d/www.conf
+fi
+
+if [ ! -z "$PM_MIN_SPARE_SERVERS" ]; then
+ sed -i "s/pm.min_spare_servers =.*/pm.min_spare_servers = ${PM_MIN_SPARE_SERVERS}/g" /etc/php7/php-fpm.d/www.conf
+fi
+
+if [ ! -z "$PM_MAX_SPARE_SERVERS" ]; then
+ sed -i "s/pm.max_spare_servers =.*/pm.max_spare_servers = ${PM_MAX_SPARE_SERVERS}/g" /etc/php7/php-fpm.d/www.conf
+fi
+
+if [ ! -z "$PM_MAX_REQUESTS" ]; then
+ sed -i "s/pm.max_requests =.*/pm.max_requests = ${PM_MAX_REQUESTS}/g" /etc/php7/php-fpm.d/www.conf
+fi
+
+if [ ! -z "$PM_MAX_CHILDREN" ]; then
+ sed -i "s/pm.max_children =.*/pm.max_children = ${PM_MAX_CHILDREN}/g" /etc/php7/php-fpm.d/www.conf
+fi
+
+
 # Always chown webroot for better mounting
 chown -Rf nginx.nginx /var/www/html
 

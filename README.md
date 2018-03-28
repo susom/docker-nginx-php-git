@@ -24,7 +24,13 @@ The following flags are a list of all the currently supported options that can b
  - **GIT_HOOK_TOKEN** : Auth-Token used for the [docker-hook](https://github.com/schickling/docker-hook) listener
  - **DOCKER_HOOK_PROXY** : Set to 1 to enable `/docker-hook` as an endpoint on your nginx site
 
+ - **PM_START_SERVERS** : Set number of servers
+ - **PM_MIN_SPARE_SERVERS** : Set min spare servers
+ - **PM_MAX_SPARE_SERVERS** : Set max spare servers
+ - **PM_MAX_REQUESTS** : Set max requests
+ - **PM_MAX_CHILDREN** : Set max children
 
+  
 ### Dynamically Pulling code from git
 One of the nice features of this container is its ability to pull code from a git repository with a couple of environmental variables passed at run time.
 
