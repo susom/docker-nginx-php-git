@@ -108,7 +108,7 @@ fi
 
 
 if [[ "$HTTPS_REDIRECT" == "0" ]] ; then
- sed -i "s/if \(\$http_x_forwarded_protolocation/\#/g" /etc/nginx/sites-available/default.conf
+ sed -i "/if ($http_x_forwarded_proto/,/.*\}/d" /etc/nginx/sites-available/default.conf
 fi
 
 # Always chown webroot for better mounting
