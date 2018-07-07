@@ -57,8 +57,8 @@ RUN echo @testing http://nl.alpinelinux.org/alpine/edge/testing >> /etc/apk/repo
     mkdir -p /var/www/app && \
     mkdir -p /run/nginx && \
     mkdir -p /var/log/supervisor && \
-    pip install -U pip && \
-    pip install -U certbot && \
+    pip install --upgrade pip && \
+    pip install --upgrade certbot && \
     mkdir -p /etc/letsencrypt/webrootauth && \
     apk del gcc musl-dev linux-headers libffi-dev augeas-dev python-dev
 
@@ -110,8 +110,8 @@ RUN pip install requests
 
 # Add PHP symbolic link to be able to use in CLI
 # for some reason dockerhub is throwing an error here so adding exit0
-RUN ln -s /usr/bin/php7 /usr/bin/php; exit 0
-
+# not sure if this is needed
+RUN ln -s /usr/bin/php7 /usr/bin/php || true
 
 # Install WP-CLI
 # RUN curl -O https://raw.githubusercontent.com/wp-cli/builds/gh-pages/phar/wp-cli.phar
@@ -131,9 +131,21 @@ ADD scripts/docker-hook /usr/bin/docker-hook
 ADD scripts/hook-listener /usr/bin/hook-listener
 
 # Setup permissions
-RUN chmod 755 /usr/bin/pull && chmod 755 /usr/bin/push && chmod 755 /usr/bin/letsencrypt-setup && chmod 755 /usr/bin/letsencrypt-renew && chmod 755 /start.sh
+RUN chmod 755 /usr/bin/pull && \
+    chmod 755 /usr/bin/push && \
+    chmod 755 /usr/bin/letsencrypt-setup && \
+    chmod 755 /usr/bin/letsencrypt-renew && \
+    chmod 755 /start.sh
 RUN chmod +x /usr/bin/docker-hook
 RUN chmod +x /usr/bin/hook-listener
+
+# Setup Git Subrepo
+RUN git clone https://github.com/ingydotnet/git-subrepo.git /usr/bin/git-subrepo && \
+    cd /usr/bin/git-subrepo && \
+    git checkout release/0.4.0
+ENV GIT_SUBREPO_ROOT /usr/bin/git-subrepo
+ENV PATH /usr/bin/git-subrepo/lib:$PATH
+ENV MANPATH /usr/bin/git-subrepo/man:$MANPATH
 
 # copy in code
 ADD src/ /var/www/html/
