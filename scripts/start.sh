@@ -2,13 +2,15 @@
 
 # Disable Strict Host checking for non interactive git clones
 
-mkdir -p -m 0700 /root/.ssh
-echo -e "Host *\n\tStrictHostKeyChecking no\n" >> /root/.ssh/config
+mkdir -p -m 0700 /home/www/.ssh
+echo -e "Host *\n\tStrictHostKeyChecking no\n\tForwardAgent yes\n\tIdentityFile /home/www/.ssh/id_rsa\n" >> /home/www/.ssh/config
 
 if [ ! -z "$SSH_KEY" ]; then
- echo $SSH_KEY > /root/.ssh/id_rsa.base64
- base64 -d /root/.ssh/id_rsa.base64 > /root/.ssh/id_rsa
- chmod 600 /root/.ssh/id_rsa
+ echo $SSH_KEY > /home/www/.ssh/id_rsa.base64
+ base64 -d /home/www/.ssh/id_rsa.base64 > /home/www/.ssh/id_rsa
+ chmod 600 /home/www/.ssh/id_rsa
+ rm /home/www/.ssh/id_rsa.base64
+ chown -R www:www-data /home/www/.ssh
 fi
 
 # Set custom webroot
